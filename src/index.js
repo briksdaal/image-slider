@@ -11,6 +11,6 @@ import Image6 from './images/image_6.jpg';
 
 const imgs = [Image1, Image2, Image3, Image4, Image5, Image6];
 
-const slider = imageSlider(imgs, 800, 500);
+const slider = imageSlider(imgs, 400, 300, false, true);
 
 document.body.appendChild(slider);
