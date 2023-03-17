@@ -10,40 +10,73 @@ const slider = (imgs, width, height, autoscroll, infinite) => {
     nextBtn,
   } = getSliderElements(imgs, width, height);
 
-  let mainPosition = 0;
   const numOfImgs = imgs.length;
   const sliderWidth = width * numOfImgs;
+  const positions = {
+    left: numOfImgs,
+    main: 0,
+    right: -numOfImgs,
+  };
 
-  wideDiv.style.transform = `translateX(${-mainPosition * width}px)`;
+  wideDiv.style.transform = 'translateX(0px)';
 
+  const wideDivRight = wideDiv.cloneNode(true);
+  const wideDivLeft = wideDiv.cloneNode(true);
+  if (infinite) {
+    wideDiv.parentNode.insertBefore(wideDivLeft, wideDiv);
+    wideDiv.parentNode.appendChild(wideDivRight);
+    wideDivRight.style.transform = `translateX(${-positions.right * width}px)`;
+    wideDivLeft.style.transform = `translateX(${-positions.left * width}px)`;
+  }
   /* slide position functions */
 
-  function changePosition(newPosition) {
-    dotsArray[mainPosition % numOfImgs].classList.remove('active');
-    dotsArray[newPosition % numOfImgs].classList.add('active');
-    mainPosition = newPosition;
-    wideDiv.style.transform = `translateX(${-mainPosition * width}px)`;
+  function changePosition(newPositions) {
+    // dotsArray[positions.main % numOfImgs].classList.remove('active');
+    // dotsArray[newPositions.main % numOfImgs].classList.add('active');
+    Object.keys(positions).forEach((pos) => {
+      if (Math.abs(newPositions[pos]) === numOfImgs * 2) {
+        positions[pos] = newPositions[pos] / (-2);
+      } else {
+        positions[pos] = newPositions[pos];
+      }
+    });
+    wideDiv.style.transform = `translateX(${-positions.main * width}px)`;
+    wideDivRight.style.transform = `translateX(${-positions.right * width}px)`;
+    wideDivLeft.style.transform = `translateX(${-positions.left * width}px)`;
   }
 
   function prevSlide() {
-    let newPosition = mainPosition - 1;
-    if (newPosition < 0) {
-      newPosition = numOfImgs - 1;
+    if (!infinite) {
+      let newPosition = mainPosition - 1;
+      if (newPosition < 0) {
+        newPosition = numOfImgs - 1;
+      }
+      changePosition(newPosition);
+    } else {
+      const newPositions = { ...positions };
+      Object.keys(newPositions).forEach((pos) => { newPositions[pos] -= 1; });
+      changePosition(newPositions);
     }
-    changePosition(newPosition);
   }
 
   function nextSlide() {
-    let newPosition = mainPosition + 1;
-    if (newPosition > numOfImgs - 1) {
-      newPosition = 0;
+    if (!infinite) {
+      const newPositions = positions;
+      newPositions.main = positions.main + 1;
+      if (newPositions.main > numOfImgs - 1) {
+        newPositions.main = 0;
+      }
+      changePosition(newPositions);
+    } else {
+      const newPositions = { ...positions };
+      Object.keys(newPositions).forEach((pos) => { newPositions[pos] += 1; });
+      changePosition(newPositions);
     }
-    changePosition(newPosition);
   }
 
   function findSlideByDot(e) {
     const newPosition = +e.target.dataset.position;
-    changePosition(newPosition);
+    // changePosition(newPosition);
   }
 
   /* event listeners and intervals */

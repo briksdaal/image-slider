@@ -16,7 +16,7 @@
 
 .wide-imgs-container {
   transition: transform 0.4s ease-in-out;
-  position: relative;
+  position: absolute;
   display: flex;
 }
 
