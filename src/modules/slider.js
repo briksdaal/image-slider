@@ -48,6 +48,7 @@ const slider = (props) => {
   let activeContainer = wideDiv;
   let prevContainer = wideDivLeft;
   let activePosition = 0;
+
   /* slide position functions */
 
   function normalizePositions(newPositions) {
@@ -63,8 +64,10 @@ const slider = (props) => {
       }
     } else {
       Object.keys(newPositions).forEach((pos) => {
-        if (Math.abs(newPositions[pos]) === numOfImgs * 2) {
-          normalizedPositions[pos] = newPositions[pos] / (-2);
+        if (newPositions[pos] === numOfImgs * 2) {
+          normalizedPositions[pos] = -numOfImgs;
+        } else if (newPositions[pos] === -numOfImgs - 1) {
+          normalizedPositions[pos] = 2 * numOfImgs - 1;
         } else {
           normalizedPositions[pos] = newPositions[pos];
         }

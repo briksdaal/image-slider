@@ -13,8 +13,8 @@ const imgs = [Image1, Image2, Image3, Image4, Image5, Image6];
 
 const slider = imageSlider({
   imgs,
-  width: 400,
-  height: 300,
+  width: 1000,
+  height: 400,
   autoscroll: false,
   infinite: true,
 });
