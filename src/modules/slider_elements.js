@@ -13,6 +13,8 @@ function getSliderElements(imgs, width, height) {
 
   const wideDiv = document.createElement('div');
   wideDiv.classList.add('wide-imgs-container', 'main-imgs-container');
+  wideDiv.dataset.container = 'main';
+  wideDiv.style.zIndex = '10';
 
   imgs.forEach((img) => {
     const imgElement = new Image();
